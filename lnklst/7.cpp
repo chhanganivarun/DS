@@ -27,15 +27,24 @@ int main()
 		cout<<"Empty List!!\nAborting!!\n";
 		return -1;
 	}
+	if(k<=0)
+	{
+		cout<<"k should be greater than 0\n";
+		return -1;
+	}
 
 	LinkedList temp_ll,final_ll;
-	for(int i=0;i<k&&ll.head;i++)
-	{
-		final_ll.push_back(ll.pop_front());
-	}
 	while(ll.head)
 	{
 		int cnt=0;
+		for(cnt=0;ll.head&&cnt<k;cnt++)
+		{
+			temp_ll.push_back(ll.pop_front());
+		}
+		while(temp_ll.head!=NULL)
+		{
+			final_ll.push_back(temp_ll.pop_front());
+		}
 		for(cnt=0;ll.head&&cnt<k;cnt++)
 		{
 			temp_ll.push_front(ll.pop_front());

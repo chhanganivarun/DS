@@ -27,6 +27,12 @@ int main()
 		cout<<"Empty List!!\nAborting!!\n";
 		return -1;
 	}
+	if(k<=0)
+	{
+		cout<<"k should be greater than 0\n";
+		return -1;
+	}
+	
 	
 	LinkedList temp_ll,final_ll;
 	
@@ -42,6 +48,7 @@ int main()
 			final_ll.push_back(temp_ll.pop_front());
 		}
 	}
+	
 	cout<<"The proccessed Linked List is:\n";
 	final_ll.display();
 	return 0;
