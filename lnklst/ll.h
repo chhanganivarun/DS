@@ -1,11 +1,7 @@
 #include<iostream>
 #include<stdlib.h>
 #include<bits/stdc++.h>
-struct Node{
-	int data;
-	Node* next;
-};
-
+#include"node.h"
 class LinkedList
 {
 	Node* NewNode();

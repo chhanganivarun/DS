@@ -1,17 +1,18 @@
 #include<bits/stdc++.h>
 using namespace std;
-#include"stck.h"
+
+#include"q.h"
 
 int main()
 {
 	system("clear");
 	int opt,flag=1;
-	Stack s;
+	Queue q;
 	while(flag)
 	{
-		cout<<"1. Push new Element on the stack\n"
-			<<"2. Pop Element from top of stack\n"
-			<<"3. Print elements in the stack\n"
+		cout<<"1. Push new Element at the end of queue\n"
+			<<"2. Pop Element from front of queue\n"
+			<<"3. Print elements in the queue\n"
 			<<"4. Exit\n"
 			<<"Enter Choice:";
 		cin>>opt;
@@ -19,18 +20,18 @@ int main()
 		{
 			case 1:
 					int inf;
-					cout<<"Enter data to insert on the stack:";
+					cout<<"Enter data to insert on the queue:";
 					cin>>inf;
-					s.push(inf);
+					q.push(inf);
 					break;
 			case 2:
-					if(s.size())
-						cout<<s.pop()<<" has been popped\n";
+					if(q.size())
+						cout<<q.pop()<<" has been popped\n";
 					else
-						s.pop();
+						q.pop();
 					break;
 			case 3:
-					s.print();
+					q.display();
 					break;
 			case 4:
 					cout<<"Bye\n";
@@ -44,5 +45,4 @@ int main()
 	}
 	return 0;	
 }
-
 

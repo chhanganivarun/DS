@@ -1,10 +1,6 @@
 #include<bits/stdc++.h>
+#include"node.h"
 
-struct Node
-{
-	int data;
-	Node* next;
-};
 
 class Stack
 {
@@ -68,11 +64,7 @@ void Stack::print(Node* curr)
 }
 void Stack::print()
 {
-	for(Node* s=top;s;s=s->next)
-	{
-		cout<<s->data<<"\n";
-	}
-	cout<<":::\n";
+	return print(top);
 }
 int Stack::size()
 {
@@ -83,8 +75,6 @@ int Stack::size()
 }
 bool Stack::isEmpty()
 {
-	if(!top)
-		return true;
-	return false;
+	return !top;
 }
 
