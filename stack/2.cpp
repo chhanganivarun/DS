@@ -33,7 +33,7 @@ int main()
 				flag=0;
 		}
 	}
-	if(flag)
+	if(flag&&S.isEmpty())
 		cout<<"Success!\n";
 	else
 		cout<<"Fail\n";
