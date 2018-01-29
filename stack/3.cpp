@@ -3,8 +3,8 @@ using namespace std;
 #include"stck.h"
 
 
-int getMin(Stack &S);
-int getMax(Stack &S);
+int getMin(Stack S);
+int getMax(Stack S);
 
 int main()
 {
@@ -29,39 +29,24 @@ int main()
 	return 0;
 }
 
-int getMin(Stack &S)
+int getMin(Stack S)
 {
-	Stack temp;
 	int ret=S.top->data;
-	while(S.top)
+	for(Node *iter=S.top;iter!=NULL;iter=iter->next)
 	{
-		int x=S.pop();
-		temp.push(x);
-		if(x<ret)
-			ret=x;
-	}
-	while(temp.top)
-	{
-		S.push(temp.pop());
+		if(iter->data<ret)
+			ret=iter->data;
 	}
 	return ret;
 }
 
-int getMax(Stack &S)
+int getMax(Stack S)
 {
-	Stack temp;
 	int ret=S.top->data;
-	while(S.top)
+	for(Node *iter=S.top;iter!=NULL;iter=iter->next)
 	{
-		int x=S.pop();
-		temp.push(x);
-		if(x>ret)
-			ret=x;
-	}
-	while(temp.top)
-	{
-		S.push(temp.pop());
+		if(iter->data>ret)
+			ret=iter->data;
 	}
 	return ret;
 }
-
