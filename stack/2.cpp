@@ -28,6 +28,11 @@ int main()
 		}
 		else if(str[i]==')'||str[i]==']'||str[i]=='}')
 		{
+			if(S.isEmpty())
+			{
+				flag=0;
+				break;
+			}			
 			char ch=S.pop();
 			if(ch!=close(str[i]))
 				flag=0;
