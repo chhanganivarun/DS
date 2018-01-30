@@ -7,7 +7,7 @@ int main()
 {
 	system("clear");
 	int opt,flag=1;
-	Queue q;
+	PriorityQueue q;
 	while(flag)
 	{
 		cout<<"1. Push new Element in the priority queue\n"
