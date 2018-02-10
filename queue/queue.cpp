@@ -35,6 +35,8 @@ int main()
 					break;
 			case 4:
 					cout<<"Bye\n";
+					while(!q.isEmpty())
+						q.pop();
 					flag=0;
 					break;
 					
