@@ -1,61 +1,57 @@
 #include<bits/stdc++.h>
 using namespace std;
-int *merge(int *a,int n_a,int *b,int n_b)
+int *merge(int *a,int start,int mid,int end)
 {
-	int *c=new int [n_a+n_b];
-	int curr_a=0,curr_b=0,curr_c=0;
-	for(int curr_c=0;curr_c<n_a+n_b;)
+	int n=end-start;
+	int c[n];
+	int curr_a=start,curr_b=mid,curr_c=0;
+	int n_a=mid,n_b=end;
+	while(curr_a<n_a&&curr_b<n_b)
 	{
-		if(curr_a<n_a && curr_b<n_b && a[curr_a]<=b[curr_b])
+		if(a[curr_a]<a[curr_b])
 		{
-			c[curr_c++]=a[curr_a++];
-		}
-		else if(curr_a<n_a && curr_b<n_b && a[curr_a]>b[curr_b])
-		{
-			c[curr_c++]=b[curr_b++];
-		}
-		else if(curr_a>=n_a)
-		{
-			c[curr_c++]=b[curr_b++];
-		}
-		else if(curr_b>=n_b)
-		{
-			c[curr_c++]=a[curr_a++];
+			c[curr_c]=a[curr_a++];
+			curr_c++;
 		}
 		else
 		{
-			cout<<"NC\n";
-			cout<<a[curr_a]<<":"<<b[curr_b]<<":"<<c[curr_c]<<":\n";
-			++curr_c;
+			c[curr_c]=a[curr_b++];
+			curr_c++;
 		}
 	}
-	cout<<"\r";
-	delete []a;
-	delete []b;
-	return c;
+	while(curr_a<n_a)
+	{
+		c[curr_c]=a[curr_a++];
+		curr_c++;
+
+	}
+	while(curr_b<n_b)
+	{
+		c[curr_c]=a[curr_b++];
+		curr_c++;
+	}
+	for(int curr_c=0;curr_c<n;curr_c++)
+	{
+		a[start+curr_c]=c[curr_c];
+	}
+	
 }
 
-int *mergesort(int *arr,int n)
+void mergesort(int *arr,int start,int end)
 {
+	int n=end-start;
+	int mid=start+n/2;
 	if(n<=1)
-		return arr;
+		return ;
+		
 	
-	int mid=n/2;
-	int *a=new int[mid];
-	int *b=new int[n-mid];
-	for(int i=0;i<mid;i++)
-	{
-		a[i]=arr[i];
-	}
-	for(int i=0;i<n-mid;i++)
-	{
-		b[i]=arr[mid+i];
-	}
-	
-	a=mergesort(a,mid);
-	b=mergesort(b,n-mid);
-	int *c= merge(a,mid,b,n-mid);
-	return c;
+	mergesort(arr,start,mid);
+	mergesort(arr,mid,end);
+
+	merge(arr,start,mid,end);
+
+	cout<<endl;
+
 }
 
 int main()
@@ -63,17 +59,15 @@ int main()
 	int n;
 	cout<<"Enter number of integer inputs:";
 	cin>>n;
-	int *a=new int[n];
+	int a[n];
 	cout<<"Enter an array of "<<n<<" integers:";
 	for(int i=0;i<n;i++)
 		cin>>a[i];
 		
-	int *c=mergesort(a,n);
+	mergesort(a,0,n);
 	cout<<"\nMerged array is:";
 	for(int i=0;i<n;i++)
-		cout<<c[i]<<" ";
+		cout<<a[i]<<" ";
 	cout<<endl;
-	delete []a;
-	delete []c;
 	return 0;
 }

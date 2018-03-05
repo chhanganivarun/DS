@@ -12,9 +12,15 @@ Node* binsearch(PriorityQueue L,int key,Node *l,Node *r)
 		return NULL;
 	if(n->priority==key)
 		return n;
-	if(n->priority<key)
-		return binsearch(L,key,l,n);
-	return binsearch(L,key,n->next,r);
+	if(n->priority>key)
+	{
+		if((n->next&&n->next->priority<key)||!n->next)
+		{
+			return NULL;
+		}
+		return binsearch(L,key,n->next,r);
+	}
+	return binsearch(L,key,l,n);
 }
 
 

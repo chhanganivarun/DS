@@ -6,11 +6,12 @@
 class PriorityQueue
 {
 	Node* NewNode();
-	Node* NewNode(int inf,int);
+	Node* NewNode(string inf);
 	public:
 	Node *front,*rear;
-	PriorityQueue push(int inf,int);
-	int pop();
+	PriorityQueue push(string inf);
+	string pop();
+	void display(ostream&);
 	void display();
 	int size();
 	bool isEmpty();
@@ -28,22 +29,23 @@ Node* PriorityQueue::NewNode()
 	return np;
 }
 
-Node* PriorityQueue::NewNode(int inf,int pri)
+Node* PriorityQueue::NewNode(string inf)
 {
 	Node *np;
 	np=NewNode();
 	np->data=inf;
-	np->priority=pri;
 	return np;
 }
 
-PriorityQueue PriorityQueue::push(int inf,int pri)
+PriorityQueue PriorityQueue::push(string inf)
 {
-	Node* np=NewNode(inf,pri);
+	Node* np=NewNode(inf);
 	if(front==NULL)
 		front=rear=np;
-	else if(front->priority<pri)
+	else if(front->data>inf)
 	{
+		if(front->data==inf)
+			return *this;
 		np->next=front;
 		front=np;
 		return *this;
@@ -53,13 +55,17 @@ PriorityQueue PriorityQueue::push(int inf,int pri)
 		Node *s;
 		for(s=front;s->next!=NULL;s=s->next)
 		{
-			if(s->next->priority<pri)
+			if(s->next->data>=inf)
 				break;
 		}
 		if(s->next==NULL)
 		{
 			rear->next=np;
 			rear=np;
+			return *this;
+		}
+		else if(s->next->data==inf)
+		{
 			return *this;
 		}
 		else
@@ -72,12 +78,12 @@ PriorityQueue PriorityQueue::push(int inf,int pri)
 	return *this;
 }
 
-int PriorityQueue::pop()
+string PriorityQueue::pop()
 {
 	if(front==NULL)
 	{
 		cout<<"Underflow!!\n";
-		return -1;
+		return "";
 	}
 	if(front->next==NULL)
 	{
@@ -85,27 +91,22 @@ int PriorityQueue::pop()
 	}
 	Node *np=front;
 	front=front->next;
-	int ret=np->data;
+	string ret;
+	ret=np->data;
 	delete np;
 	return ret;
 }
 
+void PriorityQueue::display(ostream& fout)
+{
+	for(Node *sp=front;sp!=NULL;sp=sp->next)
+		fout<<sp->data<<"\n";
+
+}
 void PriorityQueue::display()
 {
 	for(Node *sp=front;sp!=NULL;sp=sp->next)
-		cout<<sp->data<<"->";
-	cout<<":::\n";
-	for(Node *sp=front;sp!=NULL;sp=sp->next)
-		cout<<sp->priority<<"->";
-	cout<<":::\n";
-	if(front==NULL)
-		if(rear==NULL)
-			cout<<"Front is:"<< "NULL"<<"\nRear is:" <<"NULL"<<endl;
-		else
-			cout<<"Front is:"<< "NULL"<<"\nRear is:" <<rear->data<<endl;
-	else
-		cout<<"Front is:"<<front->data<<"\nRear is:" <<rear->data<<endl;
-
+		cout<<sp->data<<"\n";
 }
 
 int PriorityQueue::size()
