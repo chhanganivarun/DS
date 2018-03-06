@@ -8,11 +8,17 @@ this.
 ****************************************************/
 
 #include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
 
+bool rev_sort(long a , long b )
+{
+	return a>b;
+};
 vector<long> li;
 vector<long> ld;
 vector<long> a;
+
 long LIS(long i)
 {
     if(li[i]!=-1)return li[i];
@@ -60,10 +66,22 @@ int main()
 	}
 	long lis=LIS(n-1);
 	long lds=LDS(n-1);
-	sort(b,b+n);
-	sort(
+	sort(b.begin(),b.end());
+	sort(a.begin(),a.end(),rev_sort);
+	for(long i=0;i<n;i++)
+	{
+		cout<<a[i]<<" ";
+	}
+	cout<<endl;
+	for(long i=0;i<n;i++)
+	{
+		cout<<b[i]<<" ";
+	}
+	cout<<endl;
+	
 	if(lis<=lds)
 	{
-		
+				
 	}
+	return 0;
 }

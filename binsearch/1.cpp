@@ -5,6 +5,7 @@ using namespace std;
 #include"ll.h"
 
 Node *mid(LinkedList ll,Node *l,Node *r);
+
 Node* binsearch(LinkedList L,int key,Node *l,Node *r)
 {
 	Node *n=mid(L,l,r);
@@ -12,9 +13,19 @@ Node* binsearch(LinkedList L,int key,Node *l,Node *r)
 		return NULL;
 	if(n->data==key)
 		return n;
+
 	if(n->data>key)
-		return binsearch(L,key,l,n);
-	return binsearch(L,key,n->next,r);
+	{
+		if(!n->next||(n->next&&n->next->data<key))
+		{
+			return NULL;
+		}
+		return binsearch(L,key,n->next,r);
+	}
+	if(n->data<key&&n==L.head)
+		return NULL;
+	return binsearch(L,key,l,n);
+
 }
 
 

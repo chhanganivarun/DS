@@ -20,6 +20,8 @@ Node* binsearch(PriorityQueue L,int key,Node *l,Node *r)
 		}
 		return binsearch(L,key,n->next,r);
 	}
+	if(n->priority<key&&n==L.front)
+		return NULL;
 	return binsearch(L,key,l,n);
 }
 
