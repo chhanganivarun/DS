@@ -19,7 +19,7 @@ int *cSort(int *a,int n,int exp)
 	}
 	int sorted[n];
 	for(int i=0;i<n;i++)
-		sorted[n]=-1;
+		sorted[i]=-1;
 	for(int i=n-1;i>=0;i--)
 	{
 		sorted[cnt[(a[i]/exp)%10]-1]=a[i];

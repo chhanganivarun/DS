@@ -4,7 +4,6 @@ prisoner and kill rest all. For this he makes them
 stand in a circle and gives a knife to prisoner
 number 1. He asks prisoner 1 to stab next prisoner
 and pass the knife to next prisoner alive.
-
 Given N number of prisoners, find which prisoner 
 will get to escape?
 **************************************************/

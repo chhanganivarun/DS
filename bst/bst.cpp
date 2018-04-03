@@ -55,15 +55,46 @@ Node *push_next(Node *n,Node* curr,Node *root)
 	return root;
 }
 
-void print(Node *curr)
+void InOrder(Node *curr)
 {
 	if(curr==NULL)
 		return;
-	print(curr->left);
+	InOrder(curr->left);
 	cout<<curr->data<<" ";
-	print(curr->right);
+	InOrder(curr->right);
+}
+void PreOrder(Node *curr)
+{
+	if(curr==NULL)
+		return;
+	cout<<curr->data<<" ";
+	PreOrder(curr->left);
+	PreOrder(curr->right);
+}
+void PostOrder(Node *curr)
+{
+	if(curr==NULL)
+		return;
+	PostOrder(curr->left);
+	PostOrder(curr->right);
+	cout<<curr->data<<" ";
 }
 
+void print(Node *curr)
+{
+	cout<<"In Order:\n";
+	InOrder(curr);
+	cout<<endl;
+	
+	cout<<"Pre Order:\n";
+	PreOrder(curr);
+	cout<<endl;
+	
+	cout<<"Post Order:\n";
+	PostOrder(curr);
+	cout<<endl;
+	
+}
 int main()
 {
 	Node *root=NULL;
@@ -71,8 +102,8 @@ int main()
 	system("clear");
 	while(flag)
 	{
-		cout<<"1. Push to heap\n"
-			<<"2. Print heap\n"
+		cout<<"1. Insert to BST\n"
+			<<"2. Print BST\n"
 			<<"3. Exit\n";
 		cout<<"Enter Choice:";
 		int n,inf;
