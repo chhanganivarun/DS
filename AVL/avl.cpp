@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-#include"bst.h"
+#include"avl.h"
 int main()
 {
 	Node *root=NULL;
@@ -19,7 +19,7 @@ int main()
 			case 1:
 					cout<<"Enter number to add:";
 					cin>>inf;
-					root=push(inf,root);
+					root=push(inf,root);					
 					break;
 			case 2:
 					print(root);
@@ -30,7 +30,7 @@ int main()
 					cout<<"Bye\n";
 					break;
 
-		}
+		}		
 		system("read -r -p 'Press enter to continue...' key");
 		system("clear");
 	}

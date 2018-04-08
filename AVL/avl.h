@@ -3,12 +3,16 @@ struct Node{
 	Node *parent;
 	Node *left;
 	Node *right;
+	int height;
 };
 Node *push_next(Node *n,Node* curr,Node *root);	
+int height(Node *root);
+Node *check_voilation(Node *root);
 Node *NewNode()
 {
 	Node *n=new Node;
 	n->left=n->right=n->parent=NULL;
+	n->height=1;
 	return n;
 }
 Node *NewNode(int inf)
@@ -19,38 +23,58 @@ Node *NewNode(int inf)
 }
 Node* push(int inf,Node *root)
 {
+	return push(inf,root,root);
+}
+Node* push(int inf,Node *root,Node *curr)
+{
 	Node *n=NewNode(inf);
 	if(root==NULL)
 	{
 		root=n;
 	}
 	else
-		push_next(n,root,root);
+	{
+		if(n->data<curr->data)
+		{
+			if(curr->left==NULL)
+			{
+				curr->left=inf;
+				curr->left->parent=curr;
+				Node *n=curr->parent;
+			
+			}
+			else
+			{
+				return push(inf,root,curr->left);
+			}
+		}
+		else
+		{
+			if(curr->right==NULL)
+			{
+				curr->right=inf;
+				curr->right->parent=curr;
+			}
+			else
+			{
+				return push(inf,root,curr->right);
+			}
+		}
+		return root;		
+	}
+	
+	root=check_voilation(root);
 	return root;
 }
-Node *push_next(Node *n,Node* curr,Node *root)
+Node *push_next(Node *n,Node *root,Node *curr)
 {
-	if(n->data<curr->data)
-	{
-		if(curr->left==NULL)
-		{
-			curr->left=n;
-			curr->left->parent=curr;
-		}
-		else
-			return push_next(n,curr->left,root);
-	}
-	else
-	{
-		if(curr->right==NULL)
-		{
-			curr->right=n;
-			curr->right->parent=curr;
-		}
-		else
-			return push_next(n,curr->right,root);
-	}
-	return root;
+}
+
+int height(Node *root)
+{
+	if(root==NULL)
+		return 0;
+	return max(height(root->left),height(root->right))+1;
 }
 
 Node *smallest(Node *root)
@@ -193,9 +217,7 @@ bool search(int inf,Node* root)
 	return search(inf,root->left);
 }
 
-int height(Node *root)
+Node *check_voilation(Node *root)
 {
-	if(root==NULL)
-		return 0;
-	return max(height(root->left),height(root->right))+1;
+	
 }

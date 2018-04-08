@@ -4,7 +4,13 @@ struct Node{
 	Node *left;
 	Node *right;
 };
-Node *push_next(Node *n,Node* curr,Node *root);	
+Node *push_next(Node *n,Node* curr,Node *root);
+int height(Node *curr)
+{
+	if(!curr)
+		return 0;
+	return max(height(curr->left),height(curr->right))+1;
+}
 Node *NewNode()
 {
 	Node *n=new Node;
@@ -78,18 +84,69 @@ void PostOrder(Node *curr)
 	cout<<curr->data<<" ";
 }
 
+void PrintTree(Node* curr,int offset=0)
+{
+	pair<Node*,int> a[100];
+	int start=0,end=0;
+	int currheight=-1;
+	a[end++]=make_pair(curr,0);
+	int h=height(curr);
+	int space=pow(2,h);
+	while(a[start].second<h)
+	{
+	  if(currheight!=a[start].second)
+	  {
+			currheight=a[start].second;
+			space/=2;
+	    cout<<"\n";
+			for(int i=0;i<space;i++)
+							cout<<"\t";
+	  }
+	  if(a[start].first)
+	  {
+	    cout<<a[start].first->data;
+
+	    if(a[start].first->left)
+	      a[end++]=make_pair(a[start].first->left,a[start].second+1);
+	    else
+	      a[end++]=make_pair((Node *)NULL,a[start].second+1);
+	    if(a[start].first->right)
+	      a[end++]=make_pair(a[start].first->right,a[start].second+1);
+
+	    else
+	      a[end++]=make_pair((Node *)NULL,a[start].second+1);
+
+	  }
+	  else
+	  {
+//			cout<<"NULL";
+	    a[end++]=make_pair((Node *)NULL,a[start].second+1);
+	    a[end++]=make_pair((Node *)NULL,a[start].second+1);
+	  }
+		for(int i=0;i<2*space;i++)
+			cout<<"\t";
+	  start++;
+	}
+}
 void bfs(Node *curr)
 {
-	Node* a[100];
+	pair<Node*,int> a[100];
 	int start=0,end=0;
-	a[end++]=curr;
+	int currheight=0;
+	a[end++]=make_pair(curr,0);
 	while(start!=end)
 	{
-		cout<<a[start]->data<<" ";
-		if(a[start]->left)
-			a[end++]=a[start]->left;
-		if(a[start]->right)
-			a[end++]=a[start]->right;
+		if(currheight!=a[start].second)
+		{
+			cout<<",";
+			currheight=a[start].second;
+		}
+
+		cout<<a[start].first->data<<" ";
+		if(a[start].first->left)
+			a[end++]=make_pair(a[start].first->left,a[start].second+1);
+		if(a[start].first->right)
+			a[end++]=make_pair(a[start].first->right,a[start].second+1);
 		start++;
 	}
 
@@ -99,17 +156,20 @@ void print(Node *curr)
 	cout<<"In Order:\n";
 	InOrder(curr);
 	cout<<endl;
-	
+
 	cout<<"Pre Order:\n";
 	PreOrder(curr);
 	cout<<endl;
-	
+
 	cout<<"Post Order:\n";
 	PostOrder(curr);
 	cout<<endl;
 
 	cout<<"BFS:\n";
 	bfs(curr);
+	cout<<"\n";
+
+	PrintTree(curr);
 	cout<<"\n";
 }
 
@@ -122,7 +182,7 @@ bool check_bst(Node *root)
 	if(root->right&&root->right->data<root->data)
 		return false;
 	return check_bst(root->left)&&check_bst(root->right);
-		
+
 }
 Node *find(Node *root,int x)
 {
