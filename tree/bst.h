@@ -5,6 +5,25 @@ struct Node{
 	Node *right;
 };
 Node *push_next(Node *n,Node* curr,Node *root);
+int height(Node *curr);
+Node *NewNode();
+Node *NewNode(int inf);
+Node* push(int inf,Node *root);
+Node *push_next(Node *n,Node* curr,Node *root);
+Node *smallest(Node *curr);
+void InOrder(Node *curr);
+void PreOrder(Node *curr);
+void PostOrder(Node *curr);
+void PrintTree(Node* curr);
+void bfs(Node *curr);
+void print(Node *curr);
+bool check_bst(Node *root);
+Node *find(int x,Node *root);
+bool search(int inf,Node* root);
+void free_tree(Node *curr);
+Node* deleteNode(Node *curr,Node *root);
+Node* deleteNode(int inf,Node *curr,Node *root);
+
 int height(Node *curr)
 {
 	if(!curr)
@@ -58,7 +77,12 @@ Node *push_next(Node *n,Node* curr,Node *root)
 	}
 	return root;
 }
-
+Node *smallest(Node *curr)
+{
+	if(curr->left)
+		return smallest(curr->left);
+	return curr;
+}
 void InOrder(Node *curr)
 {
 	if(curr==NULL)
@@ -67,6 +91,114 @@ void InOrder(Node *curr)
 	cout<<curr->data<<" ";
 	InOrder(curr->right);
 }
+Node* deleteNode(int inf,Node *curr,Node *root)
+{
+	if(!find(inf,curr))
+		return root;
+	//cout<<"Found node "<<find(inf,curr)->data<<"\n";
+	return deleteNode(find(inf,curr),root);
+}
+Node* deleteNode(Node *curr,Node *root)
+{
+	if(!curr)
+		return NULL;
+	if(curr->left&&curr->right)
+	{
+		//cout<<"Both children ";
+		int replace=smallest(curr->right)->data;
+		curr=deleteNode(replace,curr,curr);
+		curr->data=replace;
+		return root;
+	}
+	else if(curr->left)
+	{
+		//cout<<"Has Left child ";
+		Node* ret=curr->parent;
+		if(curr->parent)
+		{
+			//cout<<"Has parent ";
+			if(curr->parent->left==curr)
+			{
+				curr->parent->left=curr->left;
+				//cout<<"Left of parent\n";
+			}
+			else
+			{
+				curr->parent->right=curr->left;
+				//cout<<"Right of parent\n";
+			}
+
+			ret=root;
+		}
+		else
+		{
+			ret=curr->left;
+			//cout<<"No parent\n";
+		}
+
+		curr->left->parent=curr->parent;
+
+		delete curr;
+		return ret;
+	}
+	else if(curr->right)
+	{
+		//cout<<"Has Right child ";
+		Node *ret;
+		if(curr->parent)
+		{
+			//cout<<"Has parent ";
+			if(curr->parent->left==curr)
+			{
+				curr->parent->left=curr->right;
+				//cout<<"Left of parent\n";
+			}
+			else
+			{
+				curr->parent->right=curr->right;
+				//cout<<"Right of parent\n";
+			}
+			ret=root;
+		}
+		else
+		{
+			ret=curr->right;
+			//cout<<"No parent\n";
+		}
+		curr->right->parent=curr->parent;
+		delete curr;
+		return ret;
+	}
+	else
+	{
+		//cout<<"No child ";
+		Node *ret;
+		if(curr->parent)
+		{
+			//cout<<"Has parent ";
+			if(curr->parent->left==curr)
+			{
+				curr->parent->left=NULL;
+				//cout<<"Left of parent\n";
+			}
+			else
+			{
+				curr->parent->right=NULL;
+				//cout<<"Right of parent\n";
+			}
+			ret=root;
+		}
+		else
+		{
+			ret=curr->right;
+			//cout<<"No parent\n";
+		}
+		delete curr;
+		return ret;
+	}
+
+}
+
 void PreOrder(Node *curr)
 {
 	if(curr==NULL)
@@ -84,9 +216,11 @@ void PostOrder(Node *curr)
 	cout<<curr->data<<" ";
 }
 
-void PrintTree(Node* curr,int offset=0)
+void PrintTree(Node* curr)
 {
-	pair<Node*,int> a[100];
+	if(!curr)
+		return ;
+	pair<Node*,int> a[2048];
 	int start=0,end=0;
 	int currheight=-1;
 	a[end++]=make_pair(curr,0);
@@ -98,38 +232,43 @@ void PrintTree(Node* curr,int offset=0)
 	  {
 			currheight=a[start].second;
 			space/=2;
-	    cout<<"\n";
+		cout<<"\n";
 			for(int i=0;i<space;i++)
-							cout<<"\t";
+							cout<<"    ";
 	  }
 	  if(a[start].first)
 	  {
-	    cout<<a[start].first->data;
+		cout<<a[start].first->data;
+		int size_data=log10(abs(a[start].first->data)?abs(a[start].first->data):1);
+		if(a[start].first->left)
+		  a[end++]=make_pair(a[start].first->left,a[start].second+1);
+		else
+		  a[end++]=make_pair((Node *)NULL,a[start].second+1);
+		if(a[start].first->right)
+		  a[end++]=make_pair(a[start].first->right,a[start].second+1);
 
-	    if(a[start].first->left)
-	      a[end++]=make_pair(a[start].first->left,a[start].second+1);
-	    else
-	      a[end++]=make_pair((Node *)NULL,a[start].second+1);
-	    if(a[start].first->right)
-	      a[end++]=make_pair(a[start].first->right,a[start].second+1);
+		else
+		  a[end++]=make_pair((Node *)NULL,a[start].second+1);
 
-	    else
-	      a[end++]=make_pair((Node *)NULL,a[start].second+1);
+	  for(int i=0;i<8*space-size_data;i++)
+		cout<<" ";
 
 	  }
 	  else
 	  {
-//			cout<<"NULL";
-	    a[end++]=make_pair((Node *)NULL,a[start].second+1);
-	    a[end++]=make_pair((Node *)NULL,a[start].second+1);
-	  }
+
+		a[end++]=make_pair((Node *)NULL,a[start].second+1);
+		a[end++]=make_pair((Node *)NULL,a[start].second+1);
 		for(int i=0;i<2*space;i++)
-			cout<<"\t";
+			cout<<"    ";
+	  }
 	  start++;
 	}
 }
 void bfs(Node *curr)
 {
+	if(!curr)
+		return ;
 	pair<Node*,int> a[100];
 	int start=0,end=0;
 	int currheight=0;
@@ -153,6 +292,12 @@ void bfs(Node *curr)
 }
 void print(Node *curr)
 {
+	if(curr)
+		cout<<"Root:"<<curr->data<<"\n";
+	cout<<"Tree:\n";
+	PrintTree(curr);
+	cout<<"\n";
+
 	cout<<"In Order:\n";
 	InOrder(curr);
 	cout<<endl;
@@ -169,8 +314,6 @@ void print(Node *curr)
 	bfs(curr);
 	cout<<"\n";
 
-	PrintTree(curr);
-	cout<<"\n";
 }
 
 bool check_bst(Node *root)
@@ -184,15 +327,15 @@ bool check_bst(Node *root)
 	return check_bst(root->left)&&check_bst(root->right);
 
 }
-Node *find(Node *root,int x)
+Node *find(int x,Node *root)
 {
 	if(root==NULL)
 		return NULL;
 	if(root->data==x)
 		return root;
 	if(root->data<x)
-		return find(root->right,x);
-	return find(root->left,x);
+		return find(x,root->right);
+	return find(x,root->left);
 }
 void free_tree(Node *curr)
 {
