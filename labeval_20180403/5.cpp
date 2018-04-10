@@ -69,6 +69,8 @@ int main()
 	for(int i=0;i<n;i++)
 	{
 		cout<<a[i];
+		for(int j=a[i].size();j<maxim;j++)
+		    cout<<"0";
 		cout<<"\n";
 	}
 	cout<<endl;
