@@ -1,12 +1,16 @@
+enum Color {RED,BLACK};
 struct Node{
 	int data;
 	Node *parent;
 	Node *left;
 	Node *right;
 	int height;
+	bool color;//0 for red 1 for black
 };
+int blackheight=0;
 Node *push_next(Node *n,Node* curr,Node *root);
 int height(Node *curr);
+int black_height(Node *curr);
 Node *NewNode();
 Node *NewNode(int inf);
 Node* push(int inf,Node *root);
@@ -26,6 +30,7 @@ Node* deleteNode(Node *curr,Node *root);
 Node* deleteNode(int inf,Node *curr,Node *root);
 Node* check_violation(Node *curr,Node *root);
 int update_height(Node *curr);
+int update_black_height(Node *curr);
 Node* ll_rotation(Node *curr);
 Node* rr_rotation(Node *curr);
 Node* lr_rotation(Node *curr);
@@ -72,9 +77,21 @@ int height(Node *curr)
 int update_height(Node *curr)
 {
 	if(!curr)
+	{
 		return 0;
+	}
 	return curr->height=max(update_height(curr->left),update_height(curr->right))+1;
 }
+
+int update_black_height(Node *curr)
+{
+	if(!curr)
+	{
+		return 0;
+	}
+	return max(update_height(curr->left),update_height(curr->right))+(curr->color);
+}
+
 int get_height(Node *curr)
 {
 	return curr?curr->height:0;
@@ -84,6 +101,7 @@ Node *NewNode()
 	Node *n=new Node;
 	n->left=n->right=n->parent=NULL;
 	n->height=1;
+	n->color=1;// initially red coloured
 	return n;
 }
 Node *NewNode(int inf)
@@ -98,6 +116,7 @@ Node* push(int inf,Node *root)
 	if(root==NULL)
 	{
 		root=n;
+		root->color=0;
 	}
 	else
 		root=push_next(n,root,root);
@@ -347,7 +366,7 @@ Node* check_violation(Node *curr,Node *root)
 			if(!curr->parent)
 			{
 				root=curr;
-				cout<<"Root updated to " <<root->data<<"\n";
+				cout<<"Root updated to" <<root->data<<"\n";
 			}
 		}
 		//right right rotation
@@ -359,7 +378,7 @@ Node* check_violation(Node *curr,Node *root)
 			if(!curr->parent)
 			{
 				root=curr;
-				cout<<"Root updated to " <<root->data<<"\n";
+				cout<<"Root updated to" <<root->data<<"\n";
 			}
 		}
 		//left right rotation
@@ -371,7 +390,7 @@ Node* check_violation(Node *curr,Node *root)
 			if(!curr->parent)
 			{
 				root=curr;
-				cout<<"Root updated to " <<root->data<<"\n";
+				cout<<"Root updated to" <<root->data<<"\n";
 			}
 		}
 		//right left rotation
@@ -379,16 +398,11 @@ Node* check_violation(Node *curr,Node *root)
 		{
 			flag=true;
 			cout<<"Requries right left rotation\n";
-			curr=rl_rotation(curr);
-			if(!curr->parent)
-			{
-				root=curr;
-				cout<<"Root updated to " <<root->data<<"\n";
-			}
+			//curr=rl_rotation(curr);
 		}
 		if(flag)
 		{
-			//root=check_violation(root,root);
+			//check_violation(root,root);
 		}
 
 /**/

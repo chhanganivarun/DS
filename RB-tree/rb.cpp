@@ -35,7 +35,7 @@ int main()
 					flag=0;
 					cout<<"Bye\n";
 					break;
-			case 5://Hidden Case for debugging purposes
+			case 5:
 					root=check_violation(root,root);
 					break;
 		}
