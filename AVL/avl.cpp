@@ -38,6 +38,7 @@ int main()
 			case 5://Hidden Case for debugging purposes
 					root=check_violation(root,root);
 					break;
+
 		}
 		system("read -r -p 'Press enter to continue...' key");
 		system("clear");

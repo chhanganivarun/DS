@@ -57,8 +57,6 @@ void NodePrint(Node *curr)
 		cout<<curr->right->data<<"\n";
 	else
 		cout<<"NULL"<<"\n";
-
-
 }
 
 //function definitions
