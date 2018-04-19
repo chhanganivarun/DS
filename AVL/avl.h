@@ -24,13 +24,44 @@ bool search(int inf,Node* root);
 void free_tree(Node *curr);
 Node* deleteNode(Node *curr,Node *root);
 Node* deleteNode(int inf,Node *curr,Node *root);
-void check_violation(Node *curr,Node *root);
+Node* check_violation(Node *curr,Node *root);
 int update_height(Node *curr);
 Node* ll_rotation(Node *curr);
 Node* rr_rotation(Node *curr);
 Node* lr_rotation(Node *curr);
 Node* rl_rotation(Node *curr);
 
+//debug funtions
+void NodePrint(Node *curr)
+{
+	if(!curr)
+	{
+		cout<<"Null Node Input!\n";
+		return ;
+	}
+	cout<<"Node Print:\nNode:"<<curr->data<<endl;
+	cout<<"Parent of "<<curr->data<<":";
+	if(curr->parent)
+		cout<<curr->parent->data<<"\n";
+	else
+		cout<<"NULL"<<"\n";
+
+	cout<<"Left of "<<curr->data<<":";
+	if(curr->left)
+		cout<<curr->left->data<<"\n";
+	else
+		cout<<"NULL"<<"\n";
+
+	cout<<"Right of "<<curr->data<<":";
+	if(curr->right)
+		cout<<curr->right->data<<"\n";
+	else
+		cout<<"NULL"<<"\n";
+
+
+}
+
+//function definitions
 int height(Node *curr)
 {
 	if(!curr)
@@ -52,7 +83,7 @@ Node *NewNode()
 {
 	Node *n=new Node;
 	n->left=n->right=n->parent=NULL;
-	height=1;
+	n->height=1;
 	return n;
 }
 Node *NewNode(int inf)
@@ -69,9 +100,9 @@ Node* push(int inf,Node *root)
 		root=n;
 	}
 	else
-		push_next(n,root,root);
+		root=push_next(n,root,root);
 	update_height(root);
-	check_violation(root,root);
+	root=check_violation(root,root);
 	return root;
 }
 Node *push_next(Node *n,Node* curr,Node *root)
@@ -119,7 +150,7 @@ Node* deleteNode(int inf,Node *curr,Node *root)
 	//cout<<"Found node "<<find(inf,curr)->data<<"\n";
 	Node *n= deleteNode(find(inf,curr),root);
 	update_height(n);
-	check_violation(n,n);
+	n=check_violation(n,n);
 	return n;
 }
 Node* deleteNode(Node *curr,Node *root)
@@ -223,36 +254,143 @@ Node* deleteNode(Node *curr,Node *root)
 
 }
 
-
-void check_violation(Node *curr,Node *root)
+Node* ll_rotation(Node *curr)
 {
-	if(!curr)
-		return ;
-	if(abs(get_height(curr->left)-get_height(curr))>1)
+	//PrintTree(curr);
+	Node *ret=curr->left;
+	if(!ret)
+		return curr;
+	Node *replace=ret->right;
+
+	if(replace)
+		replace->parent=curr;
+
+	ret->parent=curr->parent;
+	curr->left=replace;
+
+	if(curr->parent)
 	{
+		if(curr==curr->parent->left)
+		{
+			curr->parent->left=ret;
+		}
+		else
+			curr->parent->right=ret;
+	}
+	ret->right=curr;
+	curr->parent=ret;
+
+	/*
+	cout<<"Rotated ll for new node:"<<ret->data<<endl;
+	NodePrint(ret);
+	NodePrint(ret->left);
+	NodePrint(ret->right);
+	NodePrint(curr);
+	bfs(ret);
+	cout<<"\n";
+	InOrder(ret);
+	*/
+	return ret;
+}
+Node *rr_rotation(Node *curr)
+{
+	Node *ret=curr->right;
+	if(!ret)
+		return curr;
+
+	Node *replace=ret->left;
+	if(replace)
+		replace->parent=curr;
+
+	ret->left=curr;
+	ret->parent=curr->parent;
+
+	if(curr->parent)
+	{
+		if(curr==curr->parent->left)
+		{
+			curr->parent->left=ret;
+		}
+		else
+			curr->parent->right=ret;
+	}
+	curr->parent=ret;
+	curr->right=replace;
+	return ret;
+}
+Node *lr_rotation(Node *curr)
+{
+	curr->left=rr_rotation(curr->left);
+	return ll_rotation(curr);
+}
+Node *rl_rotation(Node *curr)
+{
+	curr->right=ll_rotation(curr->right);
+	return rr_rotation(curr);
+}
+Node* check_violation(Node *curr,Node *root)
+{
+	update_height(root);
+	if(!curr||!root)
+		return root;
+	if(abs(get_height(curr->left)-get_height(curr->right))>1)
+	{
+		cout<<"Violates at curr:"<<curr->data<<endl;
+		bool flag=false;
+/**/
 		//left left rotation
 		if(get_height(curr->left)>get_height(curr->right)&&get_height(curr->left->left)>=get_height(curr->left->right))
 		{
+			cout<<"Requries left left rotation\n";
+			flag=true;
 			curr=ll_rotation(curr);
+			if(!curr->parent)
+			{
+				root=curr;
+				cout<<"Root updated to" <<root->data<<"\n";
+			}
 		}
 		//right right rotation
 		else if(get_height(curr->left)<get_height(curr->right)&&get_height(curr->right->right)>=get_height(curr->right->left))
 		{
+			flag=true;
+			cout<<"Requries right right rotation\n";
 			curr=rr_rotation(curr);
+			if(!curr->parent)
+			{
+				root=curr;
+				cout<<"Root updated to" <<root->data<<"\n";
+			}
 		}
 		//left right rotation
 		else if(get_height(curr->left)>get_height(curr->right))
 		{
+			flag=true;
+			cout<<"Requries left right rotation\n";
 			curr=lr_rotation(curr);
+			if(!curr->parent)
+			{
+				root=curr;
+				cout<<"Root updated to" <<root->data<<"\n";
+			}
 		}
 		//right left rotation
 		else
-			curr=rl_rotation(curr);
+		{
+			flag=true;
+			cout<<"Requries right left rotation\n";
+			//curr=rl_rotation(curr);
+		}
+		if(flag)
+		{
+			//check_violation(root,root);
+		}
 
-		check_violation(root,root);
+/**/
 	}
-	check_violation(curr->left,root);
-	check_violation(curr->right,root);
+	root=check_violation(curr->left,root);
+	root=check_violation(curr->right,root);
+	return root;
 }
 
 void PreOrder(Node *curr)
