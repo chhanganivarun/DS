@@ -5,7 +5,7 @@ struct Node{
 	Node *left;
 	Node *right;
 	int height;
-	bool color;//0 for red 1 for black
+	bool color;//0 for red 1 for black 
 };
 int blackheight=0;
 Node *push_next(Node *n,Node* curr,Node *root);
