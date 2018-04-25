@@ -1,8 +1,0 @@
-In file included from /usr/include/c++/5/algorithm:61:0,
-                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:64,
-                 from /home/varun/CodeBlocks-bin/DS/DP/MED.cpp:2:
-/usr/include/c++/5/bits/stl_algobase.h: In instantiation of ‘const _Tp& std::min(const _Tp&, const _Tp&, _Compare) [with _Tp = int; _Compare = int]’:
-/home/varun/CodeBlocks-bin/DS/DP/MED.cpp:12:64:   required from here
-/usr/include/c++/5/bits/stl_algobase.h:246:17: error: ‘__comp’ cannot be used as a function
-       if (__comp(__b, __a))
-                 ^
