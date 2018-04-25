@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-#include"avl.h"
+#include"rb.h"
 int main()
 {
 	Node *root=NULL;
